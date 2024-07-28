@@ -4,23 +4,24 @@ class IdeasController < ApplicationController
 
   def index
     @location = params[:location]
-    @responses = []
+    @responses = {}
     @today = Date.today
 
     if @location.present?
-      client = OpenAI::Client.new
-      response = client.chat(parameters: {
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: "Create a code aarray with 10 things to do #{@today} in #{@location} without a name. Check things todo today. Don't duplicate things. Elaborate on the things todo. Show only the code. No extra code, just the array. no const thingsToDo var names. Make it compatible with"}]
-      })
-      if response["choices"] && response["choices"][0] && response["choices"][0]["message"]
-        @responses = response["choices"][0]["message"]["content"].split("\n").map(&:strip).reject(&:empty?)
-      else
-        @responses << "No responses received from GPT-4."
-      end
+      client = OpenAI::Client.new(api_key: ENV['OPENAI_API_KEY'])
+      response = client.chat(
+        parameters: {
+          model: "gpt-3.5-turbo",
+          response_format: { type: "json_object" },
+          messages: [{ role: "user", content: "Give me some JSON please. 10 things to do on #{@today} in #{@location}. Check things to do today. Don't duplicate things. Elaborate on the things to do." }],
+          temperature: 0.7,
+        }
+      )
+      # puts JSON.pretty_generate(response)
+      # @responses = JSON.pretty_generate(response)
+      puts response.dig("choices", 0, "message", "content")
     end
   end
-
   def new
   end
 
