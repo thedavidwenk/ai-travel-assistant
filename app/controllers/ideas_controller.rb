@@ -17,11 +17,19 @@ class IdeasController < ApplicationController
           temperature: 0.7,
         }
       )
-      # puts JSON.pretty_generate(response)
-      # @responses = JSON.pretty_generate(response)
       puts response.dig("choices", 0, "message", "content")
+
+      content = response.dig("choices", 0, "message", "content")
+      if content
+        @responses = JSON.parse(content) rescue {}
+      else
+        logger.error("No content in response")
+      end
     end
+    # raise 
   end
+
+
   def new
   end
 

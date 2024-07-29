@@ -1,4 +1,4 @@
-<h1>Ideas#index</h1>
+<h1>Get your ideas for the weekend</h1>
 <div class="position-relative">
   <div class="d-flex justify-content-center row">
     <div class="search">
@@ -17,14 +17,13 @@
 
 <div>
   <% if @responses.present? %>
-    <% @responses.each do |response| %>
-    <p>
-      <%= response %>
-    </p>
-    <% end %>
+    <ul>
+      <% @responses["things_to_do"].each do |item| %>
+        <li><strong>Activity:</strong> <%= item["activity"] || item["name"]  %></li>
+        <li><strong>Description:</strong> <%= item["description"] %></li>
+      <% end %>
+    </ul>
   <% else %>
-    <p>
-      Search for a location
-    </p>   
-  <% end %>  
+    <p>No things to do found.</p>
+  <% end %>
 </div>
