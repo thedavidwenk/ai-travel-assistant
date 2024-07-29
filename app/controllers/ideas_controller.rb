@@ -28,11 +28,4 @@ class IdeasController < ApplicationController
     end
     # raise 
   end
-
-
-  def new
-  end
-
-  def create
-  end
 end
